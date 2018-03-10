@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class BallDemo   
 {
     private Canvas myCanvas;
-
     /**
      * Create a BallDemo object. Creates a fresh canvas and makes it visible.
      */
@@ -13,74 +12,50 @@ public class BallDemo
     {
         myCanvas = new Canvas("Ball Demo", 600, 500);
     }
-
-    /**
-     * Simulate two bouncing balls
-     */
-    public void bounce()
-    {
-        int ground = 400; 
-
-        myCanvas.setVisible(true);
-        myCanvas.drawLine(50, ground, 550, ground);
-        
-        BouncingBall ball = new BouncingBall(50, 50, 16, Color.BLUE, ground, myCanvas);
-        ball.draw();
-        BouncingBall ball2 = new BouncingBall(70, 80, 20, Color.RED, ground, myCanvas);
-        ball2.draw();
-
-        // make them bounce
-        boolean finished =  false;
-        while(!finished) {
-            myCanvas.wait(50);           // small delay
-            ball.move();
-            ball2.move();
-            // stop once ball has travelled a certain distance on x axis
-            if(ball.getXPosition() >= 550 || ball2.getXPosition() >= 550) {
-                finished = true;
-            }
-        }
-    }
+    
     public void bounce(int numBolas) {
         int suelo = 400;
+        int limiteD = 550; 
         
         myCanvas.setVisible(true);
-        myCanvas.drawLine(50,suelo,550,suelo);
+        myCanvas.drawLine(50,suelo,limiteD,suelo);
         
         ArrayList<BouncingBall> bolas = new ArrayList<>();
-        
         for(int r = 0; r < numBolas; r++){  
             bolas.add(bolaAleatoria(suelo));
-        }
-        
+            bolas.get(r).draw();
+        }  
+        botar(bolas,limiteD);
+    }
+    
+    private BouncingBall bolaAleatoria(int suelo) {
+        Random aleatorio = new Random();
+        int xPosicion = aleatorio.nextInt(126) + 25;
+        int yPosicion = aleatorio.nextInt(76);
+        int d = aleatorio.nextInt(31) + 5;
+        Color color = new Color(aleatorio.nextInt(256),aleatorio.nextInt(256),aleatorio.nextInt(256));
+        return new BouncingBall(xPosicion, yPosicion, d, color, suelo, myCanvas);
+    }
+    
+    /**
+     * Bota hasta que sale suelo a la derecha
+     */
+    private void botar(ArrayList<BouncingBall> bolas, int limiteDerecho) {
         boolean finalizado =  false;
         while(!finalizado) {
-            
+            // Retraso.
             myCanvas.wait(50);
             for(BouncingBall bola : bolas) {
                 bola.move();
             }
-            
             int a = 0;
-            
-            
+            // Detiene la bola tras moverse lo suficiente en el eje x.
             while(!finalizado && a < bolas.size()) {
-                if(bolas.get(a).getXPosition() >= 550) {
+                if(bolas.get(a).getXPosition() >= limiteDerecho) {
                     finalizado = true;
                 }
                 a++;
             }
         }
-    }
-    
-    /**
-     * 
-     * @return Devuelve bola aleatoria.
-     */
-    private BouncingBall bolaAleatoria(int suelo) {
-        Random aleatorio = new Random();
-        int diametro = aleatorio.nextInt(41) + 10;
-        Color color = new Color(aleatorio.nextInt(256),aleatorio.nextInt(256),aleatorio.nextInt(256));
-        return new BouncingBall(50, 50, diametro, color, suelo, myCanvas);
-    }
+    }    
 }
