@@ -1,12 +1,6 @@
 import java.awt.Color;
-
-/**
- * Class BallDemo - a short demonstration showing animation with the 
- * Canvas class. 
- *
- * @author Michael Kölling and David J. Barnes
- * @version 2011.07.31
- */
+import java.util.Random;
+import java.util.ArrayList;
 
 public class BallDemo   
 {
@@ -46,5 +40,47 @@ public class BallDemo
                 finished = true;
             }
         }
+    }
+    public void bounce(int numBolas) {
+        int suelo = 400;
+        
+        myCanvas.setVisible(true);
+        myCanvas.drawLine(50,suelo,550,suelo);
+        
+        ArrayList<BouncingBall> bolas = new ArrayList<>();
+        
+        for(int r = 0; r < numBolas; r++){  
+            bolas.add(bolaAleatoria(suelo));
+        }
+        
+        boolean finalizado =  false;
+        while(!finalizado) {
+            
+            myCanvas.wait(50);
+            for(BouncingBall bola : bolas) {
+                bola.move();
+            }
+            
+            int a = 0;
+            
+            
+            while(!finalizado && a < bolas.size()) {
+                if(bolas.get(a).getXPosition() >= 550) {
+                    finalizado = true;
+                }
+                a++;
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @return Devuelve bola aleatoria.
+     */
+    private BouncingBall bolaAleatoria(int suelo) {
+        Random aleatorio = new Random();
+        int diametro = aleatorio.nextInt(41) + 10;
+        Color color = new Color(aleatorio.nextInt(256),aleatorio.nextInt(256),aleatorio.nextInt(256));
+        return new BouncingBall(50, 50, diametro, color, suelo, myCanvas);
     }
 }
