@@ -25,14 +25,11 @@ public class BallDemo
      */
     public void bounce()
     {
-        int ground = 400;   // position of the ground line
+        int ground = 400; 
 
         myCanvas.setVisible(true);
-
-        // draw the ground
         myCanvas.drawLine(50, ground, 550, ground);
-
-        // crate and show the balls
+        
         BouncingBall ball = new BouncingBall(50, 50, 16, Color.BLUE, ground, myCanvas);
         ball.draw();
         BouncingBall ball2 = new BouncingBall(70, 80, 20, Color.RED, ground, myCanvas);
